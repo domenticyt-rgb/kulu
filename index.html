@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whop Earnings Calculator - Estimate Creator Revenue</title>
+  <meta name="description" content="Calculate your estimated creator earnings based on your video uploads, average views per video, CPM rate, and ad spend.">
+  
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow elements -->
+  <div class="ambient-glow glow-top" aria-hidden="true"></div>
+  <div class="ambient-glow glow-bottom" aria-hidden="true"></div>
+
+  <main class="page-container">
+    <!-- Header Section -->
+    <header class="header">
+      <div class="brand-badge">
+        <svg class="whop-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 6.5C4 5.11929 5.11929 4 6.5 4H17.5C18.8807 4 20 5.11929 20 6.5V17.5C20 18.8807 18.8807 20 17.5 20H6.5C5.11929 20 4 18.8807 4 17.5V6.5Z" fill="url(#paint0_linear)" />
+          <path d="M7.5 8.5L9.5 15.5L12 9.5L14.5 15.5L16.5 8.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="paint0_linear" x1="4" y1="4" x2="20" y2="20" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#FF6243"/>
+              <stop offset="1" stop-color="#FF3815"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span>Whop Creator Tools</span>
+      </div>
+      <h1 class="main-title">Whop Earnings Calculator</h1>
+      <p class="subtitle">Calculate your estimated creator earnings based on your video uploads, average views per video, and CPM rate with ad spend deductions.</p>
+      
+      <!-- Currency Exchange indicator & quick toggle -->
+      <div class="rate-badge-container">
+        <div class="rate-badge" title="Dollar to INR Conversion Rate">
+          <span class="rate-dot"></span>
+          <span class="rate-label">1 USD = ₹</span>
+          <input 
+            type="number" 
+            id="usd-rate-input" 
+            class="rate-input" 
+            value="95" 
+            step="0.5" 
+            min="50" 
+            max="150" 
+            aria-label="USD to INR rate"
+          >
+          <span class="rate-currency">INR</span>
+        </div>
+        <div class="rate-presets" aria-label="USD to INR rate presets">
+          <button type="button" class="rate-btn" data-rate="94">₹94</button>
+          <button type="button" class="rate-btn active" data-rate="95">₹95</button>
+          <button type="button" class="rate-btn" data-rate="94.5">₹94.5</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Calculator Card -->
+    <section class="calculator-card" id="calculator-section" aria-label="Earnings Calculator">
+      <div class="card-inner">
+        
+        <!-- INPUT 1: VIDEOS -->
+        <div class="input-group" id="group-videos">
+          <div class="input-header">
+            <div class="label-container">
+              <label for="videos-slider" class="input-title">How many videos?</label>
+              <span class="input-caption">Total videos published per month</span>
+            </div>
+            <div class="stepper-value-container">
+              <button type="button" class="stepper-btn" id="btn-decrease-videos" aria-label="Decrease videos by 1">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                  <path fill-rule="evenodd" d="M4 10a.75.75 0 01.75-.75h10.5a.75.75 0 010 1.5H4.75A.75.75 0 014 10z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+              <div class="value-badge" id="videos-badge">
+                <span id="videos-display" class="badge-number">10</span>
+                <span class="badge-unit">videos</span>
+              </div>
+              <button type="button" class="stepper-btn" id="btn-increase-videos" aria-label="Increase videos by 1">
+                <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                  <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="slider-wrapper">
+            <input 
+              type="range" 
+              id="videos-slider" 
+              name="videos" 
+              min="1" 
+              max="100" 
+              value="10" 
+              step="1" 
+              class="custom-slider"
+              aria-label="Number of videos"
+            >
+            <div class="slider-scale">
+              <span>1</span>
+              <span>25</span>
+              <span>50</span>
+              <span>75</span>
+              <span>100</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- INPUT 2: VIEWS -->
+        <div class="input-group" id="group-views">
+          <div class="input-header">
+            <div class="label-container">
+              <label for="views-slider" class="input-title">How many views?</label>
+              <span class="input-caption">Average views <strong class="highlight-text">per video</strong></span>
+            </div>
+            <div class="value-badge highlight-badge" id="views-badge">
+              <span id="views-display" class="badge-number">100K</span>
+              <span class="badge-subtext" id="views-exact-display">(100,000 views)</span>
+            </div>
+          </div>
+
+          <div class="slider-wrapper">
+            <input 
+              type="range" 
+              id="views-slider" 
+              name="views" 
+              min="0" 
+              max="21" 
+              value="9" 
+              step="1" 
+              class="custom-slider"
+              aria-label="Average views per video"
+            >
+            <div class="slider-scale">
+              <span>1K</span>
+              <span>25K</span>
+              <span>100K</span>
+              <span>1M</span>
+              <span>10M</span>
+            </div>
+          </div>
+
+          <!-- Quick Presets for Views -->
+          <div class="preset-pills" aria-label="Views presets">
+            <button type="button" class="preset-pill" data-views="10000">10K</button>
+            <button type="button" class="preset-pill" data-views="50000">50K</button>
+            <button type="button" class="preset-pill active" data-views="100000">100K</button>
+            <button type="button" class="preset-pill" data-views="500000">500K</button>
+            <button type="button" class="preset-pill" data-views="1000000">1M</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- INPUT 3: PAY FOR VIEWS (CPM) -->
+        <div class="input-group" id="group-cpm">
+          <div class="input-header">
+            <div class="label-container">
+              <label for="cpm-slider" class="input-title">How much do you get paid for views?</label>
+              <span class="input-caption">Amount paid per <strong>1,000 views</strong> (CPM)</span>
+            </div>
+            <div class="value-badge" id="cpm-badge">
+              <span id="cpm-display" class="badge-number">$4.00</span>
+              <span class="badge-unit">/ 1K views</span>
+            </div>
+          </div>
+
+          <div class="slider-wrapper">
+            <input 
+              type="range" 
+              id="cpm-slider" 
+              name="cpm" 
+              min="0.5" 
+              max="25" 
+              value="4" 
+              step="0.25" 
+              class="custom-slider"
+              aria-label="Pay per 1,000 views (CPM rate)"
+            >
+            <div class="slider-scale">
+              <span>$0.50</span>
+              <span>$5.00</span>
+              <span>$10.00</span>
+              <span>$15.00</span>
+              <span>$25.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- INPUT 4: HOW MUCH PAID FOR VIEWS (AD SPEND / COST) -->
+        <div class="input-group" id="group-cost">
+          <div class="input-header">
+            <div class="label-container">
+              <label for="cost-slider" class="input-title">How much did you pay for views?</label>
+              <span class="input-caption">Cost / Ad spend incurred to acquire views (deducted from earnings)</span>
+            </div>
+            
+            <div class="cost-input-box">
+              <div class="inr-input-wrapper">
+                <span class="currency-symbol-inr">₹</span>
+                <input 
+                  type="number" 
+                  id="cost-input" 
+                  class="cost-number-input" 
+                  min="0" 
+                  max="10000000" 
+                  step="100" 
+                  value="0" 
+                  placeholder="0"
+                  aria-label="Cost spent on views in Rupees"
+                >
+              </div>
+              <div class="cost-usd-subtext" id="cost-usd-display">≈ $0.00 USD</div>
+            </div>
+          </div>
+
+          <div class="slider-wrapper">
+            <input 
+              type="range" 
+              id="cost-slider" 
+              name="cost" 
+              min="0" 
+              max="18" 
+              value="0" 
+              step="1" 
+              class="custom-slider"
+              aria-label="Cost slider for views"
+            >
+            <div class="slider-scale">
+              <span>₹0</span>
+              <span>₹1K</span>
+              <span>₹5K</span>
+              <span>₹20K</span>
+              <span>₹100K</span>
+            </div>
+          </div>
+
+          <!-- Quick Presets for Cost in INR -->
+          <div class="preset-pills" id="cost-preset-pills" aria-label="Cost presets in Rupees">
+            <button type="button" class="preset-pill active" data-cost="0">₹0 (Free)</button>
+            <button type="button" class="preset-pill" data-cost="500">₹500</button>
+            <button type="button" class="preset-pill" data-cost="1000">₹1,000</button>
+            <button type="button" class="preset-pill" data-cost="2500">₹2,500</button>
+            <button type="button" class="preset-pill" data-cost="5000">₹5,000</button>
+            <button type="button" class="preset-pill" data-cost="10000">₹10,000</button>
+          </div>
+        </div>
+
+        <!-- RESULTS SECTION -->
+        <div class="results-container" id="results-section">
+          
+          <!-- Result Card 1: Per Video Earnings -->
+          <div class="result-card per-video-card" id="card-per-video">
+            <div class="result-meta">
+              <div class="result-icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+              </div>
+              <div class="result-text-group">
+                <div class="badge-featured" id="per-video-badge-tag">Per Video</div>
+                <h2 class="result-title">Per Video Earnings</h2>
+                <span class="result-formula-label" id="per-video-formula">(100K ÷ 1,000) × $4.00</span>
+              </div>
+            </div>
+            
+            <div class="earnings-display-stack">
+              <!-- USD Display -->
+              <div class="result-amount-wrap">
+                <span class="currency-symbol">$</span>
+                <span class="result-amount" id="per-video-amount">400.00</span>
+              </div>
+              <!-- Converted INR Display -->
+              <div class="inr-conversion" id="per-video-inr-wrap">
+                <span class="inr-symbol">≈ ₹</span>
+                <span class="inr-amount" id="per-video-inr">34,200.00</span>
+                <span class="inr-currency-tag">INR</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Result Card 2: Monthly Earnings -->
+          <div class="result-card monthly-card highlight-card" id="card-monthly">
+            <div class="card-glow-edge"></div>
+            <div class="result-meta">
+              <div class="result-icon-wrap accent-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+              </div>
+              <div class="result-text-group">
+                <div class="badge-featured" id="monthly-badge-tag">Total Projected</div>
+                <h2 class="result-title" id="monthly-title-text">Monthly Earnings</h2>
+                <span class="result-formula-label" id="monthly-formula">$400.00 × 10 videos</span>
+              </div>
+            </div>
+            
+            <div class="earnings-display-stack">
+              <!-- USD Display -->
+              <div class="result-amount-wrap">
+                <span class="currency-symbol">$</span>
+                <span class="result-amount large" id="monthly-amount">4,000.00</span>
+              </div>
+              <!-- Converted INR Display -->
+              <div class="inr-conversion large-inr" id="monthly-inr-wrap">
+                <span class="inr-symbol">≈ ₹</span>
+                <span class="inr-amount" id="monthly-inr">3,42,000.00</span>
+                <span class="inr-currency-tag">INR</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Small Disclaimer -->
+        <p class="disclaimer-text">
+          <svg class="info-icon" viewBox="0 0 20 20" fill="currentColor" width="14" height="14" aria-hidden="true">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
+          </svg>
+          Estimated earnings only. Actual earnings may vary. <span id="disclaimer-rate-text">Conversion: 1 USD = ₹95.00 INR.</span>
+        </p>
+
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
